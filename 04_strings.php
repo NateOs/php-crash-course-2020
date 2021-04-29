@@ -1,7 +1,10 @@
 <?php
 
 // Create simple string
+$string = 'Hello Zure';
+$string2 = 'Hello Zura';
 
+echo $string.'<br>';
 // String concatenation
 
 // String functions
