@@ -1,0 +1,7 @@
+{
+	"editor.fontFamily": "'Fira Code', Consolas, 'Courier New', monospace",
+	"editor.inlineHints.fontFamily": "'Fira Code', Consolas, 'Courier New', monospace",
+	"terminal.integrated.fontWeightBold": null,
+	"editor.fontLigatures": true,
+	"php.validate.executablePath": "C:\\xampp\\php\\php.exe"
+}
