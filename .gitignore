@@ -4,3 +4,4 @@ vendor
 *.jpeg
 *.png
 *.webp
+.vscode/settings.json
