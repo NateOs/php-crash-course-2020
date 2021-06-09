@@ -5,3 +5,4 @@ vendor
 *.png
 *.webp
 .vscode/settings.json
+node_modules
