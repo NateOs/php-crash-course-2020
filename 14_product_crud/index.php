@@ -4,6 +4,16 @@ $pdo = new PDO('mysql:host=localhost;port=3306;port=3306;dbname=products_crud', 
 
 // if connection fails, throw exception
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+//Querying the DB
+$statement = $pdo->prepare('SELECT * FROM PRODUCTS ORDER BY CREATE_DATE DESC');
+$statement->execute();
+$products = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+echo '<pre>';
+var_dump($products);
+echo '</pre>';
+
 ?>
 
 <!doctype html>
@@ -26,9 +36,11 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">Image</th>
+      <th scope="col">Title</th>
+      <th scope="col">Price</th>
+      <th scope="col">Create</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
@@ -36,18 +48,24 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       <th scope="row">1</th>
       <td>Mark</td>
       <td>Otto</td>
+      <td>Otto</td>
+      <td>Otto</td>
       <td>@mdo</td>
     </tr>
     <tr>
       <th scope="row">2</th>
       <td>Jacob</td>
       <td>Thornton</td>
-      <td>@fat</td>
+      <td>Thornton</td>
+      <td>Thornton</td>
+      <td>Thornton</td>
     </tr>
     <tr>
       <th scope="row">3</th>
       <td>Larry</td>
-      <td>the Bird</td>
+      <td>Larry</td>
+      <td>Larry</td>
+      <td>Larry</td>
       <td>@twitter</td>
     </tr>
   </tbody>
