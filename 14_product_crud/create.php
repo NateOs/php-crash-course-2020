@@ -5,26 +5,29 @@ $pdo = new PDO('mysql:host=localhost;port=3306;port=3306;dbname=products_crud', 
 // if connection fails, throw exception
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-/* _$POST is a global var where POST request values are stored */
-$title = $_POST['title'];
-$description = $_POST['description'];
-$price = $_POST['price'];
-$date = date('Y-m-d H:i:s');
+if ($_SERVER['REQUEST_METHOD' === 'POST']) {
+  /* _$POST is a global var where POST request values are stored */
+  $title = $_POST['title'];
+  $description = $_POST['description'];
+  $price = $_POST['price'];
+  $date = date('Y-m-d H:i:s');
 
 
-// var_dump( $_POST);
+  // var_dump( $_POST);
 
-/* calling execute directly on the db insert can result in SQL injection attacks */
-$statement = $pdo->prepare("INSERT INTO products (title, image, description, price, create_date) 
-                VALUES (:title, :image, :description, :price, :date)"); 
+  /* calling execute directly on the db insert can result in SQL injection attacks */
+  $statement = $pdo->prepare("INSERT INTO products (title, image, description, price, create_date) 
+                  VALUES (:title, :image, :description, :price, :date)"); 
 
-$statement->bindValue(':title', $title);
-$statement->bindValue(':image', '');
-$statement->bindValue(':description', $description);
-$statement->bindValue(':price', $price);
-$statement->bindValue(':date', $date);
+  $statement->bindValue(':title', $title);
+  $statement->bindValue(':image', '');
+  $statement->bindValue(':description', $description);
+  $statement->bindValue(':price', $price);
+  $statement->bindValue(':date', $date);
 
-$statement->execute();
+  $statement->execute();
+}
+
 ?>
 
 <!doctype html>
