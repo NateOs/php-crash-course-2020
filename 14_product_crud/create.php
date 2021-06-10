@@ -5,10 +5,26 @@ $pdo = new PDO('mysql:host=localhost;port=3306;port=3306;dbname=products_crud', 
 // if connection fails, throw exception
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-//Querying the DB
-$statement = $pdo->prepare('SELECT * FROM PRODUCTS ORDER BY CREATE_DATE DESC');
+/* _$POST is a global var where POST request values are stored */
+$title = $_POST['title'];
+$description = $_POST['description'];
+$price = $_POST['price'];
+$date = date('Y-m-d H:i:s');
+
+
+// var_dump( $_POST);
+
+/* calling execute directly on the db insert can result in SQL injection attacks */
+$statement = $pdo->prepare("INSERT INTO products (title, image, description, price, create_date) 
+                VALUES (:title, :image, :description, :price, :date)"); 
+
+$statement->bindValue(':title', $title);
+$statement->bindValue(':image', '');
+$statement->bindValue(':description', $description);
+$statement->bindValue(':price', $price);
+$statement->bindValue(':date', $date);
+
 $statement->execute();
-$products = $statement->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!doctype html>
@@ -26,24 +42,26 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
   </head>
   <body class="p-5">
     <h1>Create new Product</h1>
+    <a href="index.php">Go back</a>
 
+/** get exposes the parameters in the URL, therefore post method is more secure. */
     <form action="" method="post">
       <div class="form-group">
         <label>Product Image</label>
         <br>
-        <input type="file">
+        <input type="file" name="image">
       </div>
       <div class="form-group">
         <label for="">Product Title</label>
-        <input type="title" class="form-control" placeholder="Enter">
+        <input type="title" name="title" class="form-control" placeholder="Enter">
       </div>
       <div class="form-group">
         <label for="">Product Desc</label>
-        <textarea class="form-control" placeholder="Enter"></textarea>
+        <textarea class="form-control" name="description" placeholder="Enter"></textarea>
       </div>
       <div class="form-group">
         <label for="">Product Price</label>
-        <input type="number" step=".01" class="form-control mb-3" placeholder="Enter">
+        <input type="number" name="price" step=".01" class="form-control mb-3" placeholder="Enter">
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
