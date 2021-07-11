@@ -22,27 +22,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   // var_dump($_SERVER);
   // echo '</pre>';
 
+  $errors = [];
+
+  if (!$title) {
+    $errors[] = "Product title is required";
+  }
+
+  if (!$price) {
+    $errors[] = "Product price is required";
+  }
+
   /* calling execute directly on the db insert can result in SQL injection attacks */
-  $statement = $pdo->prepare("INSERT INTO products (title, image, description, price, create_date) 
-                   VALUES (:title, :image, :description, :price, :date)");
+  if (empty($errors)) {
+    $statement = $pdo->prepare("INSERT INTO products (title, image, description, price, create_date) 
+    VALUES (:title, :image, :description, :price, :date)");
 
-  $statement->bindValue(":title", $title);
-  $statement->bindValue(":image", "");
-  $statement->bindValue(":description", $description);
-  $statement->bindValue(":price", $price);
-  $statement->bindValue(":date", $date);
+    $statement->bindValue(":title", $title);
+    $statement->bindValue(":image", "");
+    $statement->bindValue(":description", $description);
+    $statement->bindValue(":price", $price);
+    $statement->bindValue(":date", $date);
 
-  $statement->execute();
-}
-
-$errors = [];
-
-if (!$title) {
-  $errors[] = "Product title is required";
-}
-
-if (!$price) {
-  $errors[] = "Product price is required";
+    $statement->execute();
+  }
 }
 ?>
 
@@ -62,14 +64,18 @@ if (!$price) {
   <body class="p-5">
     <h1>Create new Product</h1>
     <a href="index.php">Go back</a>
-
+    
+    <?php if (!empty($errors)): ?>
+<!-- div for errors -->
     <div class="alert alert-danger">
       <?php foreach ($errors as $error): ?>
         <div><?php echo $error; ?></div>
       <?php endforeach; ?>
     </div>
+    <?php endif; ?>
 
-/** get exposes the parameters in the URL, therefore post method is more secure. */
+
+<!--GET exposes the parameters in the URL, therefore post method is more secure. -->
     <form action="" method="POST">
       <div class="form-group">
         <label>Product Image</label>
@@ -78,15 +84,16 @@ if (!$price) {
       </div>
       <div class="form-group">
         <label for="">Product Title</label>
-        <input type="title" name="title" class="form-control" placeholder="Enter">
+        <input type="title" name="title" class="form-control" placeholder="Enter" value="<?php echo $title; ?>"
       </div>
       <div class="form-group">
         <label for="">Product Desc</label>
-        <textarea class="form-control" name="description" placeholder="Enter"></textarea>
+        <textarea class="form-control" name="description" placeholder="Enter" >
+        <?php echo $description; ?></textarea>
       </div>
       <div class="form-group">
         <label for="">Product Price</label>
-        <input type="number" name="price" step=".01" class="form-control mb-3" placeholder="Enter">
+        <input type="number" name="price" step=".01" class="form-control mb-3" placeholder="Enter" value="<?php echo $price; ?>">
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
   </form>
