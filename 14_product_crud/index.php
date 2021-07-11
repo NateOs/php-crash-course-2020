@@ -1,19 +1,23 @@
-<?php 
+<?php
 // data connection
-$pdo = new PDO('mysql:host=localhost;port=3306;port=3306;dbname=products_crud', 'root', '');
+$pdo = new PDO(
+  "mysql:host=localhost;port=3306;port=3306;dbname=products_crud",
+  "root",
+  ""
+);
 
 // if connection fails, throw exception
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //Querying the DB
-$statement = $pdo->prepare('SELECT * FROM PRODUCTS ORDER BY CREATE_DATE DESC');
+$statement = $pdo->prepare("SELECT * FROM PRODUCTS ORDER BY CREATE_DATE DESC");
 $statement->execute();
+// Query results stored on variable
 $products = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 // echo '<pre>';
 // var_dump($products);
 // echo '</pre>';
-
 ?>
 
 <!doctype html>
@@ -48,15 +52,15 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
         </tr>
       </thead>
       <tbody>
-
-      <?php foreach ($products as $i => $product) : ?>
+<!-- dynamically generating table content from the db -->
+      <?php foreach ($products as $i => $product): ?>
 
           <tr>
-            <th scope="row"><?php echo $i + 1 ?> </th>
+            <th scope="row"><?php echo $i + 1; ?> </th>
             <td></td>
-            <td><?php echo $product['title'] ?> </td>
-            <td><?php echo $product['price'] ?> </td>
-            <td><?php echo $product['create_date'] ?> </td>
+            <td><?php echo $product["title"]; ?> </td>
+            <td><?php echo $product["price"]; ?> </td>
+            <td><?php echo $product["create_date"]; ?> </td>
             <td>
               <button class="btn btn-sm btn-outline-primary">Edit</button>
               <button class="btn btn-sm btn-outline-danger">Delete</button>

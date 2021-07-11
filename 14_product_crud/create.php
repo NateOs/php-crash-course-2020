@@ -1,38 +1,49 @@
-<?php 
+<?php
 // data connection
-$pdo = new PDO('mysql:host=localhost;port=3306;port=3306;dbname=products_crud', 'root', '');
+$pdo = new PDO(
+  "mysql:host=localhost;port=3306;port=3306;dbname=products_crud",
+  "root",
+  ""
+);
 
 // if connection fails, throw exception
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  /* _$POST is a global var where POST request values are stored */
+  $title = $_POST["title"];
+  $description = $_POST["description"];
+  $price = $_POST["price"];
+  $date = date("Y-m-d H:i:s");
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-   /* _$POST is a global var where POST request values are stored */
-   $title = $_POST['title'];
-   $description = $_POST['description'];
-   $price = $_POST['price'];
-   $date = date('Y-m-d H:i:s');
- 
-   // var_dump( $_POST);
- 
-   // echo '<pre>';
-   // var_dump($_SERVER);
-   // echo '</pre>';
- 
-   /* calling execute directly on the db insert can result in SQL injection attacks */
-   $statement = $pdo->prepare("INSERT INTO products (title, image, description, price, create_date) 
-                   VALUES (:title, :image, :description, :price, :date)"); 
- 
-   $statement->bindValue(':title', $title);
-   $statement->bindValue(':image', '');
-   $statement->bindValue(':description', $description);
-   $statement->bindValue(':price', $price);
-   $statement->bindValue(':date', $date);
- 
-   $statement->execute();
- 
-};
+  // var_dump( $_POST);
 
+  // echo '<pre>';
+  // var_dump($_SERVER);
+  // echo '</pre>';
+
+  /* calling execute directly on the db insert can result in SQL injection attacks */
+  $statement = $pdo->prepare("INSERT INTO products (title, image, description, price, create_date) 
+                   VALUES (:title, :image, :description, :price, :date)");
+
+  $statement->bindValue(":title", $title);
+  $statement->bindValue(":image", "");
+  $statement->bindValue(":description", $description);
+  $statement->bindValue(":price", $price);
+  $statement->bindValue(":date", $date);
+
+  $statement->execute();
+}
+
+$errors = [];
+
+if (!$title) {
+  $errors[] = "Product title is required";
+}
+
+if (!$price) {
+  $errors[] = "Product price is required";
+}
 ?>
 
 <!doctype html>
@@ -51,6 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <body class="p-5">
     <h1>Create new Product</h1>
     <a href="index.php">Go back</a>
+
+    <div class="alert alert-danger">
+      <?php foreach ($errors as $error): ?>
+        <div><?php echo $error; ?></div>
+      <?php endforeach; ?>
+    </div>
 
 /** get exposes the parameters in the URL, therefore post method is more secure. */
     <form action="" method="POST">
